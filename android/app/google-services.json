@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "862252524727",
+    "project_id": "snap-share-8b62d",
+    "storage_bucket": "snap-share-8b62d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862252524727:android:657c97d27bb576a2005932",
+        "android_client_info": {
+          "package_name": "com.example.snap_share"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7gvf2W82IvSWbF-EVGUz1S32NJxqtUiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862252524727:android:b4714f8672a42fac005932",
+        "android_client_info": {
+          "package_name": "com.example.tiktok_clone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7gvf2W82IvSWbF-EVGUz1S32NJxqtUiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
