@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:tiktok_clone/constant.dart';
+import 'package:tiktok_clone/models/user.dart' as model;
 
 class AuthCotroller extends GetxController {
   //method for upload the firebase storage(image upload)
@@ -30,6 +31,19 @@ class AuthCotroller extends GetxController {
         UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
             email: email, password: password);
         String downloadUrl = await _uploadToStorage(image);
+        //add model class
+        model.User user = model.User(
+            name: userName,
+            profilePhoto: downloadUrl,
+            email: email,
+            uid: cred.user!.uid);
+        //add data to firestore database
+        await fireStore
+            .collection('users')
+            .doc(cred.user!.uid)
+            .set(user.tojson());
+      } else {
+        Get.snackbar("Error Creating Account", 'Please enter all the fields');
       }
     } catch (e) {
       Get.snackbar('Error Creating Account', e.toString());
