@@ -6,7 +6,7 @@ class TextInputField extends StatelessWidget {
   final String labelText;
   final bool isObsecure;
   final IconData icon;
-  const TextInputField({super.key, required this.controller, required this.labelText, required this.isObsecure, required this.icon});
+  const TextInputField({super.key, required this.controller, required this.labelText,  this.isObsecure=false, required this.icon});
 
   @override
   Widget build(BuildContext context) {

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constant.dart';
+import 'package:tiktok_clone/views/widgets/text_input_field.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
-
+  LoginScreen({super.key});
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "Tiktok Clone",
@@ -20,8 +23,89 @@ class LoginScreen extends StatelessWidget {
             ),
             const Text(
               "Login",
-              style:  TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.w700,
+              ),
             ),
+            const SizedBox(
+              height: 25,
+            ),
+            //eamil
+            Container(
+              width: MediaQuery.sizeOf(context).width,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextInputField(
+                  controller: _emailController,
+                  labelText: 'Email',
+                  icon: Icons.email),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            //passowrd
+            Container(
+              width: MediaQuery.sizeOf(context).width,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextInputField(
+                controller: _passwordController,
+                labelText: 'Password',
+                icon: Icons.lock,
+                isObsecure: true,
+              ),
+            ),
+
+            const SizedBox(
+              height: 30,
+            ),
+            //custom button
+            Container(
+              width: MediaQuery.sizeOf(context).width - 40,
+              height: 50,
+              decoration: BoxDecoration(
+                color: buttonColor,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              child: InkWell(
+                  onTap: () {
+                    print("Login User");
+                  },
+                  child: const Center(
+                    child: Text(
+                      'Login',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    ),
+                  )),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Don\'t have an account? ',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    print("Navigating User");
+                  },
+                  child: Text(
+                    'Register',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: buttonColor,
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
