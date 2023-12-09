@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tiktok_clone/constant.dart';
+import 'package:tiktok_clone/controllers/auth_controller.dart';
 import 'package:tiktok_clone/views/widgets/text_input_field.dart';
+
+AuthController auth = Get.put(AuthController());
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
@@ -107,23 +111,28 @@ class SignUpScreen extends StatelessWidget {
                       Radius.circular(5),
                     ),
                   ),
-                  child: InkWell(
-                      onTap: () {
-                        authController.registerUser(
+                  child: GetBuilder<AuthController>(builder: (authcontroller) {
+                    if (authcontroller.isLoading) {
+                      return const Center(child: CircularProgressIndicator(),);
+                    }
+                    return InkWell(
+                        onTap: () {
+                          authController.registerUser(
                             _userNameController.text,
                             _emailController.text,
                             _passwordController.text,
-                           authController.profilePhot, 
-                            );
-                        print("Register");
-                      },
-                      child: const Center(
-                        child: Text(
-                          'Register',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w700),
-                        ),
-                      )),
+                            authController.profilePhot,
+                          );
+                          print("Register");
+                        },
+                        child: const Center(
+                          child: Text(
+                            'Register',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w700),
+                          ),
+                        ));
+                  }),
                 ),
                 const SizedBox(
                   height: 15,

@@ -8,7 +8,9 @@ import 'package:image_picker/image_picker.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
+  bool _isLoading = false;
   late Rx<File?> _pickedImage; // make observeable
+  bool get isLoading => _isLoading;
 //picked image
   File? get profilePhot => _pickedImage.value; // get value of _pickedImage
   void pickedImage() async {
@@ -19,8 +21,7 @@ class AuthController extends GetxController {
           'You have successfully selected your profile picture!');
     }
     //put image path
-    // _pickedImage.value = Rx<File?>(File(pickedImage!.path)) as File?;
-     _pickedImage = Rx<File?>(File(pickedImage!.path));
+    _pickedImage = Rx<File?>(File(pickedImage!.path));
   }
 
   //method for upload the firebase storage(image upload)
@@ -37,13 +38,15 @@ class AuthController extends GetxController {
 
   //registering the user
   void registerUser(
-      String userName, String email, String password ,  File? image  ) async {
+      String userName, String email, String password, File? image) async {
+    _isLoading = true;
+    update();
     //make sure every parameter has data
     try {
       if (userName.isNotEmpty &&
           email.isNotEmpty &&
-          password.isNotEmpty   &&
-          image != null  ) {
+          password.isNotEmpty &&
+          image != null) {
         //save out user to our auth and firebase
         UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
             email: email, password: password);
@@ -58,12 +61,19 @@ class AuthController extends GetxController {
         await fireStore
             .collection('users')
             .doc(cred.user!.uid)
-            .set(user.tojson());
+            .set(user.tojson())
+            .then((value) {
+          _isLoading = false;
+          update();
+          Get.snackbar("Success", 'Success');
+        });
       } else {
         Get.snackbar("Error Creating Account", 'Please enter all the fields');
       }
     } catch (e) {
       Get.snackbar('Error Creating Account', e.toString());
     }
+    _isLoading = false;
+          update();
   }
 }
