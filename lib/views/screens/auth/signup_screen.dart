@@ -113,7 +113,7 @@ class SignUpScreen extends StatelessWidget {
                             _userNameController.text,
                             _emailController.text,
                             _passwordController.text,
-                            // authController.profilePhot
+                           authController.profilePhot, 
                             );
                         print("Register");
                       },

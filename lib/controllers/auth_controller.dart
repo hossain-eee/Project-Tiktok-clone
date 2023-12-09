@@ -19,7 +19,8 @@ class AuthController extends GetxController {
           'You have successfully selected your profile picture!');
     }
     //put image path
-    _pickedImage = Rx<File?>(File(pickedImage!.path));
+    // _pickedImage.value = Rx<File?>(File(pickedImage!.path)) as File?;
+     _pickedImage = Rx<File?>(File(pickedImage!.path));
   }
 
   //method for upload the firebase storage(image upload)
@@ -36,21 +37,21 @@ class AuthController extends GetxController {
 
   //registering the user
   void registerUser(
-      String userName, String email, String password/* , File? image */) async {
+      String userName, String email, String password ,  File? image  ) async {
     //make sure every parameter has data
     try {
       if (userName.isNotEmpty &&
           email.isNotEmpty &&
-          password.isNotEmpty /* &&
-          image != null */) {
+          password.isNotEmpty   &&
+          image != null  ) {
         //save out user to our auth and firebase
         UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
             email: email, password: password);
-        // String downloadUrl = await _uploadToStorage(image);
+        String downloadUrl = await _uploadToStorage(image);
         //add model class
         model.User user = model.User(
             name: userName,
-            // profilePhoto: downloadUrl,
+            profilePhoto: downloadUrl,
             email: email,
             uid: cred.user!.uid);
         //add data to firestore database
