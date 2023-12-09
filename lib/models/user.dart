@@ -2,19 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
   String name;
-  String profilePhoto; // we are saving photo url not photo that's why string
+  // String profilePhoto; // we are saving photo url not photo that's why string
   String email;
   String uid;
   User(
       {required this.name,
-      required this.profilePhoto,
+      // required this.profilePhoto,
       required this.email,
       required this.uid});
 
   //convert to map
   Map<String, dynamic> tojson() => {
         "name": name,
-        "profilePhoto": profilePhoto,
+        // "profilePhoto": profilePhoto,
         "email": email,
         "uid": uid,
       };
@@ -24,7 +24,7 @@ class User {
     var snapShot = snap.data() as Map<String, dynamic>;
     return User(
       email: snapShot['email'],
-      profilePhoto: snapShot['profilePhoto'],
+      // profilePhoto: snapShot['profilePhoto'],
       uid:snapShot['uid'],
       name: snapShot['name'],
     );

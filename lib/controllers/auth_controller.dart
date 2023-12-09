@@ -4,8 +4,24 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:tiktok_clone/constant.dart';
 import 'package:tiktok_clone/models/user.dart' as model;
+import 'package:image_picker/image_picker.dart';
 
-class AuthCotroller extends GetxController {
+class AuthController extends GetxController {
+  static AuthController instance = Get.find();
+  late Rx<File?> _pickedImage; // make observeable
+//picked image
+  File? get profilePhot => _pickedImage.value; // get value of _pickedImage
+  void pickedImage() async {
+    final pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      Get.snackbar('Profile Picture',
+          'You have successfully selected your profile picture!');
+    }
+    //put image path
+    _pickedImage = Rx<File?>(File(pickedImage!.path));
+  }
+
   //method for upload the firebase storage(image upload)
   Future<String> _uploadToStorage(File image) async {
     Reference ref = firebaseStorage
@@ -20,21 +36,21 @@ class AuthCotroller extends GetxController {
 
   //registering the user
   void registerUser(
-      String userName, String email, String password, File? image) async {
+      String userName, String email, String password/* , File? image */) async {
     //make sure every parameter has data
     try {
       if (userName.isNotEmpty &&
           email.isNotEmpty &&
-          password.isNotEmpty &&
-          image != null) {
+          password.isNotEmpty /* &&
+          image != null */) {
         //save out user to our auth and firebase
         UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
             email: email, password: password);
-        String downloadUrl = await _uploadToStorage(image);
+        // String downloadUrl = await _uploadToStorage(image);
         //add model class
         model.User user = model.User(
             name: userName,
-            profilePhoto: downloadUrl,
+            // profilePhoto: downloadUrl,
             email: email,
             uid: cred.user!.uid);
         //add data to firestore database
