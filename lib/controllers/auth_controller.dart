@@ -30,9 +30,14 @@ class AuthController extends GetxController {
         .ref()
         .child('profilePics')
         .child(firebaseAuth.currentUser!.uid);
+        
+  // Upload the image file to Firebase Storage.
     UploadTask uploadTask = ref.putFile(image);
+     // Wait for the upload to complete and get the task snapshot.
     TaskSnapshot snap = await uploadTask;
+      // Get the download URL of the uploaded image.
     String downloadUrl = await snap.ref.getDownloadURL();
+
     return downloadUrl;
   }
 
