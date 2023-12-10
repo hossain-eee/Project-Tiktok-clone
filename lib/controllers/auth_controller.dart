@@ -9,8 +9,11 @@ import 'package:image_picker/image_picker.dart';
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
   bool _isLoading = false;
-  late Rx<File?> _pickedImage; // make observeable, RX file is automatic observeable no need to update() method, update() is used to only GetBuilder()
+  RxBool _isSigninLoading = false.obs;
+  late Rx<File?>
+      _pickedImage; // make observeable, RX file is automatic observeable no need to update() method, update() is used to only GetBuilder()
   bool get isLoading => _isLoading;
+  RxBool get isSigninLoading => _isSigninLoading;
 //picked image
   File? get profilePhot => _pickedImage.value; // get value of _pickedImage
   void pickedImage() async {
@@ -30,19 +33,19 @@ class AuthController extends GetxController {
         .ref()
         .child('profilePics')
         .child(firebaseAuth.currentUser!.uid);
-        
-  // Upload the image file to Firebase Storage.
+
+    // Upload the image file to Firebase Storage.
     UploadTask uploadTask = ref.putFile(image);
-     // Wait for the upload to complete and get the task snapshot.
+    // Wait for the upload to complete and get the task snapshot.
     TaskSnapshot snap = await uploadTask;
-      // Get the download URL of the uploaded image.
+    // Get the download URL of the uploaded image.
     String downloadUrl = await snap.ref.getDownloadURL();
 
     return downloadUrl;
   }
 
   //registering the user
-  void registerUser(
+  Future<bool> registerUser(
       String userName, String email, String password, File? image) async {
     _isLoading = true;
     update();
@@ -79,6 +82,31 @@ class AuthController extends GetxController {
       Get.snackbar('Error Creating Account', e.toString());
     }
     _isLoading = false;
-          update();
+    update();
+    return true; // this return type is only for make it async await capable, because void don't take await
+  }
+
+  void userLogin(String email, String password) async {
+    _isSigninLoading.value = true;
+    try {
+      if (email.isNotEmpty && password.isNotEmpty) {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password)
+            .then((value) {
+          Get.snackbar('Success', 'Login successful');
+          print("Login Success");
+          _isSigninLoading.value = false;
+        }).catchError((error) {
+          Get.snackbar('Error to Login', 'Invalid email or password');
+          print('Firebase Authentication Error: $error');
+        });
+      } else {
+        Get.snackbar('Incomplete Field', 'Please insert email and password');
+      }
+    } catch (e) {
+      Get.snackbar('Unexpected Error', 'An unexpected error occurred');
+      print('Unexpected Error: $e');
+    }
+    _isSigninLoading.value = false;
   }
 }

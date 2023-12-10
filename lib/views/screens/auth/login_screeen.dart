@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tiktok_clone/constant.dart';
+import 'package:tiktok_clone/views/screens/auth/signup_screen.dart';
 import 'package:tiktok_clone/views/widgets/text_input_field.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -69,16 +71,27 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               child: InkWell(
-                  onTap: () {
-                    print("Login User");
+                onTap: () {
+                  authController.userLogin(
+                      _emailController.text.trim(), _passwordController.text);
+                  // print("Login User");
+                },
+                child: Obx(
+                  () {
+                    return authController.isSigninLoading.value
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : const Center(
+                            child: Text(
+                              'Login',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w700),
+                            ),
+                          );
                   },
-                  child: const Center(
-                    child: Text(
-                      'Login',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-                    ),
-                  )),
+                ),
+              ),
             ),
             const SizedBox(
               height: 15,
@@ -94,6 +107,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
+                    Get.offAll(() => SignUpScreen());
                     print("Navigating User");
                   },
                   child: Text(
