@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
   bool _isLoading = false;
-  late Rx<File?> _pickedImage; // make observeable
+  late Rx<File?> _pickedImage; // make observeable, RX file is automatic observeable no need to update() method, update() is used to only GetBuilder()
   bool get isLoading => _isLoading;
 //picked image
   File? get profilePhot => _pickedImage.value; // get value of _pickedImage
