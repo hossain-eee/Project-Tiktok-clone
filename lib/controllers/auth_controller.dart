@@ -5,15 +5,47 @@ import 'package:get/get.dart';
 import 'package:tiktok_clone/constant.dart';
 import 'package:tiktok_clone/models/user.dart' as model;
 import 'package:image_picker/image_picker.dart';
+import 'package:tiktok_clone/views/screens/auth/login_screeen.dart';
+import 'package:tiktok_clone/views/screens/home_screen.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
   bool _isLoading = false;
   RxBool _isSigninLoading = false.obs;
+  late Rx<User?> _user; // User comes from firebase auth default
+  /* Explanation: This line creates a variable named _user. Think of it like a box where we can keep information. The User? part means this box can hold either a User or be empty (null). The late keyword means we promise to put something inside this box before we use it. */
   late Rx<File?>
       _pickedImage; // make observeable, RX file is automatic observeable no need to update() method, update() is used to only GetBuilder()
   bool get isLoading => _isLoading;
   RxBool get isSigninLoading => _isSigninLoading;
+//onReady() override,It is called automatically when the controller is initialized and ready to be used.
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    _user = Rx<User?>(firebaseAuth.currentUser);
+    _user.bindStream(firebaseAuth.authStateChanges());
+    // ever(listener, (callback) => null)
+    ever(_user, _setInitialScreen);
+
+    /* Explanation: This part is like a special function that happens when our app is ready to use. Imagine it's the time when we set up everything.
+
+_user = Rx<User?>(firebaseAuth.currentUser);: Here, we put the current user (if someone is logged in) into our _user box. It's like checking if someone is already using our app.
+
+_user.bindStream(firebaseAuth.authStateChanges());: This line says, "Hey, listen to any changes in the authentication state." It's like having ears to hear if someone logs in or out.
+
+ever(_user, _setInitialScreen);: This line means, "Whenever something changes in our _user box, do a special thing called _setInitialScreen." It's like saying, "If someone new comes in or leaves, decide what part of the app they should see." */
+  }
+
+  _setInitialScreen(User? user) {
+    if (user == null) {
+      Get.offAll(() => LoginScreen());
+    } else {
+      Get.off(() => const HomeScreen());
+    }
+    /* In simpler terms, this code checks if someone is using our app. If yes, it shows the home screen; if not, it shows the login screen. It's like deciding which door to open based on whether a friend is already inside or not! */
+  }
+
 //picked image
   File? get profilePhot => _pickedImage.value; // get value of _pickedImage
   void pickedImage() async {
