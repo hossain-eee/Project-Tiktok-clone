@@ -11,8 +11,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  Get.put(AuthController());
+  await Firebase.initializeApp().then((value) {
+     Get.put(AuthController());
+  });
+ 
   runApp(const MyApp());
 }
 
